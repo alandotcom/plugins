@@ -28,22 +28,28 @@ single pass.
 
 ### opencode
 
-opencode has no plugin format that carries agents and skills, so `install.sh` symlinks them into the
-directories opencode scans: `~/.config/opencode/skills/` and `~/.config/opencode/agents/`. Run it
-from a clone of this repository:
+opencode reads no plugin manifest, so `thermos/opencode/` is a small opencode plugin that hands it
+the same `skills/` and `agents/` directories Claude Code loads:
 
 ```bash
-./thermos/install.sh opencode
+opencode plugin add github:alandotcom/plugins
 ```
 
-Restart opencode and ask for a thermos review. Because the script creates symlinks, `git pull` in
-the clone updates what opencode loads.
+That resolves the repository's root `package.json`, whose `main` points at the plugin. Restart
+opencode; the three skills and both subagents are then available, and the agent files stay the
+single source for both hosts.
 
-### Both hosts at once
+To run it from a clone instead, add the absolute path of `thermos/opencode` to the `plugin` array in
+`opencode.json`. `opencode plugin add` rejects a local path.
 
-```bash
-./thermos/install.sh            # claude + opencode
-./thermos/install.sh --uninstall
+Pin a model for the subagents in `opencode.json`, since the shared agent files carry no
+opencode-specific model id:
+
+```json
+"agents": {
+  "thermo-nuclear-review-subagent": { "model": "azure/gpt-5.6-sol#high" },
+  "thermo-nuclear-code-quality-review-subagent": { "model": "azure/gpt-5.6-sol#high" }
+}
 ```
 
 ## Architecture

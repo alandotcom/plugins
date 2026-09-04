@@ -1,0 +1,9 @@
+{
+  "name": "thermos-opencode",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Registers the Thermos skills and review subagents with opencode.",
+  "main": "index.js",
+  "license": "MIT"
+}

@@ -3,7 +3,8 @@
 > **Fork note.** This fork adds Claude Code and opencode support for the
 > [`thermos`](thermos/) plugin: a root `.claude-plugin/marketplace.json`, a
 > `thermos/.claude-plugin/plugin.json`, host-neutral agent and skill text, and
-> [`thermos/install.sh`](thermos/install.sh) for both hosts. See
+> an opencode plugin at [`thermos/opencode/`](thermos/opencode/), and a root `package.json`
+> that lets `opencode plugin add` reach it. See
 > [thermos/README.md](thermos/README.md#installation). Everything else tracks
 > [cursor/plugins](https://github.com/cursor/plugins) unchanged.
 

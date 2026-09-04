@@ -1,0 +1,9 @@
+{
+  "name": "thermos-opencode",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Fork-only manifest. It makes `opencode plugin add github:alandotcom/plugins` install the Thermos opencode plugin, which npm-style git specifiers cannot address inside a subdirectory on their own.",
+  "main": "./thermos/opencode/index.js",
+  "license": "MIT",
+  "repository": "https://github.com/alandotcom/plugins"
+}
