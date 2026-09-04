@@ -1,11 +1,49 @@
 # Thermos plugin
 
-Thermo-nuclear branch review for Cursor agents: deep correctness and security audits, harsh maintainability rubrics, and parallel subagent orchestration.
+Thermo-nuclear branch review for coding agents: deep correctness and security audits, harsh
+maintainability rubrics, and parallel subagent orchestration. Runs in Cursor, Claude Code and
+opencode.
 
 ## Installation
 
+### Cursor
+
 ```bash
 /add-plugin thermos
+```
+
+### Claude Code
+
+Register this repository as a marketplace, then install the plugin:
+
+```bash
+claude plugin marketplace add alandotcom/plugins
+claude plugin install thermos@cursor-plugins
+```
+
+Use a local checkout instead of the GitHub source by passing its path to
+`claude plugin marketplace add`. Restart Claude Code, then run `/thermos:thermos` for the double
+review, or `/thermos:thermo-nuclear-review` and `/thermos:thermo-nuclear-code-quality-review` for a
+single pass.
+
+### opencode
+
+opencode has no plugin format that carries agents and skills, so `install.sh` symlinks them into the
+directories opencode scans: `~/.config/opencode/skills/` and `~/.config/opencode/agents/`. Run it
+from a clone of this repository:
+
+```bash
+./thermos/install.sh opencode
+```
+
+Restart opencode and ask for a thermos review. Because the script creates symlinks, `git pull` in
+the clone updates what opencode loads.
+
+### Both hosts at once
+
+```bash
+./thermos/install.sh            # claude + opencode
+./thermos/install.sh --uninstall
 ```
 
 ## Architecture
@@ -55,11 +93,16 @@ flowchart TB
 
 **Double review (thermos):**
 
-1. Gather `git diff main...HEAD` and full contents of changed files.
-2. Invoke both subagents in one message with `run_in_background: true`.
-3. Synthesize prioritized, deduped findings.
+1. Gather `git diff main...HEAD` and the full contents of the changed files.
+2. Call both subagents in one message so they run at the same time.
+3. Synthesize prioritized, deduplicated findings.
 
-**Single skill:** invoke `thermo-nuclear-review` or `thermo-nuclear-code-quality-review` in the main agent, or the matching subagent after gathering diff context.
+**Single skill:** run `thermo-nuclear-review` or `thermo-nuclear-code-quality-review` in the main
+agent, or call the matching subagent after gathering the diff context.
+
+Each host names the subagent tool differently. Claude Code uses `Agent` with `subagent_type`, Cursor
+uses `Task` with `run_in_background: true`, and opencode uses `task`. The agent files describe all
+three, so the orchestrator picks the right one for the host it runs in.
 
 ## Migration from cursor-team-kit
 

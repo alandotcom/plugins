@@ -1,0 +1,19 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "cursor-plugins",
+  "owner": {
+    "name": "Cursor",
+    "email": "plugins@cursor.com"
+  },
+  "metadata": {
+    "description": "Cursor plugins that also run in Claude Code. This fork adds Claude Code and opencode manifests; the upstream repo ships Cursor manifests only."
+  },
+  "plugins": [
+    {
+      "name": "thermos",
+      "source": "./thermos",
+      "description": "Thermo-nuclear branch review: deep security and correctness audits, harsh code-quality rubrics, and parallel review subagents.",
+      "category": "development"
+    }
+  ]
+}
