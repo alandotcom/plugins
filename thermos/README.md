@@ -47,10 +47,14 @@ opencode-specific model id:
 
 ```json
 "agents": {
-  "thermo-nuclear-review-subagent": { "model": "azure/gpt-5.6-sol#high" },
-  "thermo-nuclear-code-quality-review-subagent": { "model": "azure/gpt-5.6-sol#high" }
+  "thermo-nuclear-review-subagent": { "model": "openrouter/openai/gpt-5.6-sol#high" },
+  "thermo-nuclear-code-quality-review-subagent": { "model": "openrouter/openai/gpt-5.6-sol#high" }
 }
 ```
+
+Any model id your `opencode.json` resolves works here; the ids above are an example. A review
+reads a whole diff and the files around it, so a model with a large context window and a high
+reasoning setting suits both subagents.
 
 ## Architecture
 
