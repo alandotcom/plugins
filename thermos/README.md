@@ -1,8 +1,8 @@
 # Thermos plugin
 
 Thermo-nuclear branch review for coding agents: deep correctness and security audits, harsh
-maintainability rubrics, and parallel subagent orchestration. Runs in Cursor, Claude Code and
-opencode.
+maintainability rubrics, and parallel subagent orchestration. Runs in Cursor, Claude Code,
+opencode and Pi.
 
 ## Installation
 
@@ -55,6 +55,31 @@ opencode-specific model id:
 Any model id your `opencode.json` resolves works here; the ids above are an example. A review
 reads a whole diff and the files around it, so a model with a large context window and a high
 reasoning setting suits both subagents.
+
+### Pi
+
+Pi loads skills from `~/.pi/agent/skills/` and, with the subagent extension enabled, loads these
+agents from `~/.pi/agent/agents/`. The `subagent` tool is supplied by that extension; it is not part
+of Pi core. Configure the extension to use `agentScope: user`, then expose this checkout with
+symlinks. These commands only create the resource symlinks and do not change Pi settings:
+
+```bash
+THERMOS_ROOT=/absolute/path/to/plugins/thermos
+mkdir -p "$HOME/.pi/agent/skills" "$HOME/.pi/agent/agents"
+
+for skill in thermos thermo-nuclear-review thermo-nuclear-code-quality-review; do
+  ln -sfn "$THERMOS_ROOT/skills/$skill" "$HOME/.pi/agent/skills/$skill"
+done
+
+for agent in thermo-nuclear-review-subagent thermo-nuclear-code-quality-review-subagent; do
+  ln -sfn "$THERMOS_ROOT/agents/$agent.md" "$HOME/.pi/agent/agents/$agent.md"
+done
+```
+
+Restart Pi after creating the links. Run the combined review with `/skill:thermos`; the individual
+review skills are available as `/skill:thermo-nuclear-review` and
+`/skill:thermo-nuclear-code-quality-review`. The `thermos` skill uses the extension's parallel
+`subagent` call with `tasks: [{ agent, task, cwd }]` and `agentScope: user` to run both reviewers.
 
 ## Architecture
 
@@ -111,8 +136,9 @@ flowchart TB
 agent, or call the matching subagent after gathering the diff context.
 
 Each host names the subagent tool differently. Claude Code uses `Agent` with `subagent_type`, Cursor
-uses `Task` with `run_in_background: true`, and opencode uses `task`. The agent files describe all
-three, so the orchestrator picks the right one for the host it runs in.
+uses `Task` with `run_in_background: true`, and opencode uses `task`. Pi uses the subagent extension's
+custom `subagent` tool with `tasks` and `agentScope: user`. The agent files describe all four, so the
+orchestrator picks the right one for the host it runs in.
 
 ## Migration from cursor-team-kit
 

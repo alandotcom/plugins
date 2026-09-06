@@ -7,8 +7,8 @@ mode: subagent
 # Thermo-Nuclear Code Quality Review
 
 You are a review subagent. The parent agent already collected the git output and the changed-file
-contents. Your prompt is the user message, with labeled sections: `### Git / diff output` and
-`### Changed file contents`.
+contents. Your prompt is the user message, with a `RUBRIC_PATH: /absolute/path/to/SKILL.md` line
+and labeled sections: `### Git / diff output` and `### Changed file contents`.
 
 ## Rubric
 
@@ -16,7 +16,12 @@ contents. Your prompt is the user message, with labeled sections: `### Git / dif
    `disable-model-invocation: true`, so a host that honors that flag refuses to load the skill
    through its skill tool. The flag is deliberate: it stops a parent agent from invoking the skill
    itself and forces the audit through this subagent. Read the first `SKILL.md` that exists:
-   - `$CLAUDE_PLUGIN_ROOT/skills/thermo-nuclear-code-quality-review/SKILL.md`, when
+   - The absolute `RUBRIC_PATH` supplied by the parent, when present. The parent derives this path
+     from the loaded `thermos/SKILL.md` directory and must pass the sibling rubric's `SKILL.md`.
+   - Otherwise, in Pi, the first matching file under `~/.pi/agent/skills/`; use `find -L` so global
+     symlinks are followed:
+     `find -L ~/.pi/agent/skills -path '*thermo-nuclear-code-quality-review/SKILL.md' -print -quit 2>/dev/null`
+   - Otherwise, `$CLAUDE_PLUGIN_ROOT/skills/thermo-nuclear-code-quality-review/SKILL.md`, when
      `CLAUDE_PLUGIN_ROOT` is set.
    - Otherwise:
      `find ~/.claude ~/.config/opencode ~/.agents ~/.cursor -path '*thermo-nuclear-code-quality-review/SKILL.md' 2>/dev/null`
@@ -44,5 +49,8 @@ The parent collects the context, then calls this agent once.
      for the file contents.
    - Cursor: two `Task` calls, `subagent_type: "shell"` and `subagent_type: "explore"`.
    - opencode: a `bash` call for the diff, plus a `task` call with the `explore` agent.
-2. Call this agent with a prompt that carries a `### Git / diff output` section and a
-   `### Changed file contents` section.
+   - Pi: include this agent and the deep-review agent in one custom `subagent` call with
+     `agentScope: user` and `tasks: [{ agent, task, cwd }]`; put the absolute `RUBRIC_PATH` in each
+     task.
+2. Call this agent with a prompt that carries the absolute `RUBRIC_PATH`, a `### Git / diff output`
+   section and a `### Changed file contents` section.
