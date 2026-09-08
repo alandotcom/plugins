@@ -4,6 +4,9 @@ description: "Apply when integrating a new requirement into an existing design. 
 disable-model-invocation: true
 ---
 
+When running in Codex, first read [the Codex host guide](../../codex.md).
+
+
 # Redesign From First Principles
 
 When integrating a change, don't bolt it onto the existing design. Redesign as if the requirement had been there from the start.

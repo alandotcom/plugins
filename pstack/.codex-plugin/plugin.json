@@ -1,0 +1,37 @@
+{
+  "name": "pstack",
+  "version": "0.14.8",
+  "description": "Engineering workflows for planning, implementation, and verification.",
+  "author": {
+    "name": "Lauren Tan"
+  },
+  "homepage": "https://github.com/alandotcom/plugins/tree/main/pstack",
+  "repository": "https://github.com/alandotcom/plugins",
+  "license": "MIT",
+  "keywords": [
+    "pstack",
+    "poteto-mode",
+    "workflow",
+    "principles",
+    "agent-style",
+    "subagents",
+    "unslop"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "pstack",
+    "shortDescription": "Engineering workflows for planning, implementation, and verification.",
+    "longDescription": "Engineering workflows for planning, implementation, and verification.",
+    "developerName": "Lauren Tan",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "Use poteto-mode to implement and verify this task.",
+      "Use architect to review this design."
+    ],
+    "logo": "./assets/logo.png"
+  }
+}

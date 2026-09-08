@@ -4,6 +4,9 @@ description: Comprehensive security and correctness audit of a branch's changes.
 disable-model-invocation: true
 ---
 
+When running in Codex, first read [the Codex host guide](../../codex.md).
+
+
 # Thermo Nuclear Review
 
 Use this skill for a comprehensive security and correctness audit of a checked-out branch.

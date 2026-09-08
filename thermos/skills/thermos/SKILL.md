@@ -4,6 +4,9 @@ description: "Run both thermo-nuclear review subagents in parallel, then synthes
 disable-model-invocation: true
 ---
 
+When running in Codex, first read [the Codex host guide](../../codex.md).
+
+
 # Thermos
 
 Run the two thermo review passes as parallel subagents, then synthesize their results.
@@ -38,6 +41,8 @@ Run the two thermo review passes as parallel subagents, then synthesize their re
    }
    ```
 
+   Codex uses native children with the rubric and agent instructions supplied by path, as
+   described in [the Codex host guide](../../codex.md).
    Claude Code uses the `Agent` tool with `subagent_type` set to each name. Cursor uses `Task` with
    `run_in_background: true`. opencode uses the `task` tool.
 5. Give both subagents the same scoped context, and ask each for prioritized findings with file

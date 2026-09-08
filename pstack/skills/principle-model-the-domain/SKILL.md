@@ -4,6 +4,9 @@ description: "Apply when writing stateful logic, or when code branches a lot or 
 disable-model-invocation: true
 ---
 
+When running in Codex, first read [the Codex host guide](../../codex.md).
+
+
 # Model the Domain
 
 Encode the real domain in a data structure instead of scattering it across conditionals.

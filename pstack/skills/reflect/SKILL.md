@@ -4,6 +4,9 @@ description: Spawn three parallel review subagents over the active transcript, s
 disable-model-invocation: true
 ---
 
+When running in Codex, first read [the Codex host guide](../../codex.md).
+
+
 # Reflect
 
 Mine the current conversation for durable learnings, then route them into skill edits.

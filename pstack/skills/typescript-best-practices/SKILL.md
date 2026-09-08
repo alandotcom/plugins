@@ -5,6 +5,9 @@ paths: ["**/*.ts", "**/*.tsx"]
 disable-model-invocation: true
 ---
 
+When running in Codex, first read [the Codex host guide](../../codex.md).
+
+
 # TypeScript best practices
 
 Apply the **type-system-discipline** principle skill first.

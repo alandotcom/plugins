@@ -1,0 +1,35 @@
+{
+  "name": "thermos",
+  "version": "1.0.0",
+  "description": "Parallel correctness, security, and maintainability reviews.",
+  "author": {
+    "name": "Cursor"
+  },
+  "homepage": "https://github.com/alandotcom/plugins/tree/main/thermos",
+  "repository": "https://github.com/alandotcom/plugins",
+  "license": "MIT",
+  "keywords": [
+    "thermos",
+    "thermo-nuclear",
+    "code-review",
+    "deep-review",
+    "code-quality",
+    "security-review",
+    "subagents"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Thermos",
+    "shortDescription": "Parallel correctness, security, and maintainability reviews.",
+    "longDescription": "Parallel correctness, security, and maintainability reviews.",
+    "developerName": "Cursor",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Read"
+    ],
+    "defaultPrompt": [
+      "Use Thermos to review the current branch."
+    ],
+    "logo": "./assets/logo.png"
+  }
+}

@@ -4,6 +4,9 @@ description: Cut AI tells from any writing. Must always apply.
 disable-model-invocation: true
 ---
 
+When running in Codex, first read [the Codex host guide](../../codex.md).
+
+
 # Unslop
 
 Edit text to remove AI patterns.

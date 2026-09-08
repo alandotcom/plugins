@@ -14,11 +14,37 @@ fork it. improve it. make it yours. PRs are welcome!
 
 ## install
 
+### Cursor
+
 ```bash
 /add-plugin pstack
 ```
 
+### Codex
+
+From this checkout's root:
+
+```bash
+codex plugin marketplace add .
+codex plugin add pstack@alandotcom-plugins
+```
+
+Start a new Codex thread and select `poteto-mode` from the skill picker. Each
+pstack skill can also be selected directly. Skills use native Codex tools and
+inherit the host's model settings. `setup-pstack` reports Codex capabilities;
+it does not write Cursor configuration. Cursor cloud workers and persistent
+mode reminders are unavailable in Codex. See [Codex host behavior](codex.md)
+and the [repository installation guide](../README.md#codex).
+
+### Pi
+
+See [pstack for Pi](pi/README.md) for session loading, namespaced commands, and
+Arena workers.
+
 ## get started
+
+The following setup and examples describe Cursor. Codex and Pi use the host
+instructions linked in their installation sections.
 
 two steps:
 

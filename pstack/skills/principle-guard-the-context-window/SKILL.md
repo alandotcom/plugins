@@ -4,6 +4,9 @@ description: "Apply when context is filling up: large outputs, long files, repea
 disable-model-invocation: true
 ---
 
+When running in Codex, first read [the Codex host guide](../../codex.md).
+
+
 # Guard the Context Window
 
 The context window is finite and non-renewable within a session. Every token should be worth its cost.

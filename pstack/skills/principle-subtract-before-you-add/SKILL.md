@@ -4,6 +4,9 @@ description: "Apply when sequencing an addition, refactor, or rewrite. Remove de
 disable-model-invocation: true
 ---
 
+When running in Codex, first read [the Codex host guide](../../codex.md).
+
+
 # Subtract Before You Add
 
 When evolving a system, remove complexity first, then build.

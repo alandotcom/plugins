@@ -1,0 +1,32 @@
+{
+  "name": "alandotcom-plugins",
+  "interface": {
+    "displayName": "Alan\u2019s agent plugins"
+  },
+  "plugins": [
+    {
+      "name": "thermos",
+      "source": {
+        "source": "local",
+        "path": "./thermos"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Developer Tools"
+    },
+    {
+      "name": "pstack",
+      "source": {
+        "source": "local",
+        "path": "./pstack"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Developer Tools"
+    }
+  ]
+}

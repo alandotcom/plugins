@@ -1,0 +1,26 @@
+name: Validate Codex plugins
+
+on:
+  pull_request:
+    paths:
+      - ".agents/plugins/marketplace.json"
+      - "thermos/**"
+      - "pstack/**"
+      - "scripts/check-codex-plugins.py"
+      - ".github/workflows/validate-codex-plugins.yml"
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+      - name: Install Codex CLI
+        run: npm install --global @openai/codex@0.153.4
+      - name: Check marketplace and relocated skill packages
+        run: python3 scripts/check-codex-plugins.py

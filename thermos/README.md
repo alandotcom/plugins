@@ -2,9 +2,24 @@
 
 Thermo-nuclear branch review for coding agents: deep correctness and security audits, harsh
 maintainability rubrics, and parallel subagent orchestration. Runs in Cursor, Claude Code,
-opencode and Pi.
+opencode, Pi, and Codex.
 
 ## Installation
+
+### Codex
+
+From this checkout's root, register the marketplace and install Thermos:
+
+```bash
+codex plugin marketplace add .
+codex plugin add thermos@alandotcom-plugins
+```
+
+Start a new Codex thread and select `thermos` from the skill picker for the combined
+review. The two individual review skills are also available. Codex uses its native
+subagents with the bundled review instructions; the Markdown agent files do not
+register new Codex agent types. Parallel review requires delegation tools in the
+session. See [Codex host behavior](codex.md) and the [repository installation guide](../README.md#codex).
 
 ### Cursor
 
@@ -42,8 +57,8 @@ single source for both hosts.
 To run it from a clone instead, add the absolute path of `thermos/opencode` to the `plugin` array in
 `opencode.json`. `opencode plugin add` rejects a local path.
 
-Pin a model for the subagents in `opencode.json`, since the shared agent files carry no
-opencode-specific model id:
+The shared agents inherit the host model. To select a reviewer model, use an ID
+that your opencode provider can resolve in `opencode.json`:
 
 ```json
 "agents": {
@@ -68,13 +83,19 @@ THERMOS_ROOT=/absolute/path/to/plugins/thermos
 mkdir -p "$HOME/.pi/agent/skills" "$HOME/.pi/agent/agents"
 
 for skill in thermos thermo-nuclear-review thermo-nuclear-code-quality-review; do
-  ln -sfn "$THERMOS_ROOT/skills/$skill" "$HOME/.pi/agent/skills/$skill"
+  ln -s "$THERMOS_ROOT/skills/$skill" "$HOME/.pi/agent/skills/$skill"
 done
 
 for agent in thermo-nuclear-review-subagent thermo-nuclear-code-quality-review-subagent; do
-  ln -sfn "$THERMOS_ROOT/agents/$agent.md" "$HOME/.pi/agent/agents/$agent.md"
+  ln -s "$THERMOS_ROOT/pi/agents/$agent.md" "$HOME/.pi/agent/agents/$agent.md"
 done
 ```
+
+The commands expect unused destination paths. If a path already exists, inspect
+and back it up before replacing it. Pi-specific agent files retain the existing
+`openrouter/openai/gpt-6-astra:low` model preference and read the shared review
+instructions. Choose an available model in those Pi agent files if needed;
+Cursor, Claude Code, OpenCode, and Codex retain their own model configuration.
 
 Restart Pi after creating the links. Run the combined review with `/skill:thermos`; the individual
 review skills are available as `/skill:thermo-nuclear-review` and
@@ -137,8 +158,9 @@ agent, or call the matching subagent after gathering the diff context.
 
 Each host names the subagent tool differently. Claude Code uses `Agent` with `subagent_type`, Cursor
 uses `Task` with `run_in_background: true`, and opencode uses `task`. Pi uses the subagent extension's
-custom `subagent` tool with `tasks` and `agentScope: user`. The agent files describe all four, so the
-orchestrator picks the right one for the host it runs in.
+custom `subagent` tool with `tasks` and `agentScope: user`. Codex uses native children
+with absolute paths to the bundled instructions. The orchestrator selects the
+dispatch method for the active host.
 
 ## Migration from cursor-team-kit
 

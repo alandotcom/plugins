@@ -4,6 +4,9 @@ description: "Apply when product, UX, or feature-scope tradeoffs come up. Choose
 disable-model-invocation: true
 ---
 
+When running in Codex, first read [the Codex host guide](../../codex.md).
+
+
 # Experience First
 
 When implementation convenience conflicts with user delight, choose delight.

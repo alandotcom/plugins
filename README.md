@@ -1,12 +1,83 @@
 # Cursor plugins
 
-> **Fork note.** This fork adds Claude Code and opencode support for the
-> [`thermos`](thermos/) plugin: a root `.claude-plugin/marketplace.json`, a
-> `thermos/.claude-plugin/plugin.json`, host-neutral agent and skill text, and
-> an opencode plugin at [`thermos/opencode/`](thermos/opencode/), and a root `package.json`
-> that lets `opencode plugin add` reach it. See
-> [thermos/README.md](thermos/README.md#installation). Everything else tracks
-> [cursor/plugins](https://github.com/cursor/plugins) unchanged.
+> Fork note: this fork adds host support to selected plugins from
+> [cursor/plugins](https://github.com/cursor/plugins).
+> The root `package.json` supports both Pi and OpenCode, with separate entry points.
+> Pi loads [pstack's Pi adapter](pstack/pi/README.md).
+> OpenCode loads [Thermos](thermos/README.md#installation).
+> Thermos also supports Claude Code through the root marketplace and its plugin manifest.
+> Codex can install Thermos and pstack through `.agents/plugins/marketplace.json`.
+> Installing the repository does not load every plugin.
+> The repository runs no installation scripts to configure hosts.
+
+## Codex
+
+Use a Codex CLI with `plugin marketplace` and `plugin add` commands. From this
+checkout's root:
+
+```bash
+codex plugin marketplace add .
+codex plugin add thermos@alandotcom-plugins
+codex plugin add pstack@alandotcom-plugins
+```
+
+Install either plugin independently by running only its `plugin add` command.
+Start a new thread after installation, then select `thermos` or `poteto-mode`
+from the skill picker (`thermos:thermos` and `pstack:poteto-mode`). The plugin
+READMEs describe
+[Thermos](thermos/README.md#codex) and [pstack](pstack/README.md#codex) behavior.
+The plugins share their canonical skills with the other hosts and include Codex
+instructions for tool selection and delegation. They do not install MCP servers
+or register Markdown agent files as Codex agent types.
+
+After these changes are published, a remote installation can register the repository
+with `codex plugin marketplace add alandotcom/plugins` instead of the local path.
+While developing locally, update the version in the plugin's
+`.codex-plugin/plugin.json`, rerun its `codex plugin add` command, and start a new
+thread to load the refreshed files.
+
+Check both packages with the local Codex loader:
+
+```bash
+python3 scripts/check-codex-plugins.py
+```
+
+The check loads every skill from the checkout and a relocated copy. It makes no
+model calls and does not change plugin installation settings. The shared skills
+retain Cursor and Claude frontmatter such as `disable-model-invocation`.
+The generic skill and public-ingestion validators reject those fields; the local
+Codex loader accepts them. This repository targets local and Git marketplace
+installation, not public-directory submission.
+
+Packaging follows the [official Codex plugin format](https://developers.openai.com/plugins/build/plugins).
+
+## Pi development
+
+To load pstack for one Pi session without installing the package, run:
+
+```bash
+pi -e ./pstack/pi/index.ts
+```
+
+For development, use Node.js 24 or later and install the local dependencies:
+
+```bash
+npm ci --ignore-scripts
+```
+
+This does not register the plugin with Pi or OpenCode.
+Run the compiler check and adapter tests:
+
+```bash
+npm run typecheck:pi
+npm run test:pi
+```
+
+Pi's resource list includes only the pstack extension.
+The extension exposes pstack skills through `/pstack:<skill>` commands to avoid skill-name collisions.
+The shared skill and agent files remain in `pstack/skills` and `pstack/agents`.
+OpenCode support for pstack is not included yet.
+See [pstack for Pi](pstack/pi/README.md) for commands and capability limits.
 
 Official Cursor plugins for popular developer tools, frameworks, and SaaS products. Each plugin is a standalone directory at the repository root with its own `.cursor-plugin/plugin.json` manifest.
 

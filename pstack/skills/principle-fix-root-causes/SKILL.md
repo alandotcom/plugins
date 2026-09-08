@@ -4,6 +4,9 @@ description: "Apply when debugging. Trace each symptom to its root cause and fix
 disable-model-invocation: true
 ---
 
+When running in Codex, first read [the Codex host guide](../../codex.md).
+
+
 # Fix Root Causes
 
 When debugging, do not fix symptoms. Trace every problem to its root cause and fix it there.

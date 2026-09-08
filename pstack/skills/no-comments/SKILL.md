@@ -4,6 +4,9 @@ description: "Spawn Comment Sicko, fix accepted findings, and offer encodings fo
 disable-model-invocation: true
 ---
 
+When running in Codex, first read [the Codex host guide](../../codex.md).
+
+
 # No comments
 
 Spawn Comment Sicko. Act on accepted findings.
