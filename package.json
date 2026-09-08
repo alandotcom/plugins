@@ -1,9 +1,37 @@
 {
-  "name": "thermos-opencode",
+  "name": "alandotcom-agent-plugins",
   "version": "1.0.0",
   "type": "module",
-  "description": "Fork-only manifest. It makes `opencode plugin add github:alandotcom/plugins` install the Thermos opencode plugin, which npm-style git specifiers cannot address inside a subdirectory on their own.",
+  "description": "Shared host package: pstack for Pi and Thermos for OpenCode.",
   "main": "./thermos/opencode/index.js",
+  "keywords": [
+    "pi-package"
+  ],
+  "pi": {
+    "extensions": [
+      "./pstack/pi/index.ts"
+    ],
+    "skills": [],
+    "prompts": [],
+    "themes": []
+  },
+  "scripts": {
+    "test:pi": "node --test pstack/pi/*.test.ts",
+    "typecheck:pi": "tsc -p pstack/pi/tsconfig.json"
+  },
+  "peerDependencies": {
+    "@earendil-works/pi-coding-agent": "*"
+  },
+  "peerDependenciesMeta": {
+    "@earendil-works/pi-coding-agent": {
+      "optional": true
+    }
+  },
   "license": "MIT",
-  "repository": "https://github.com/alandotcom/plugins"
+  "repository": "https://github.com/alandotcom/plugins",
+  "devDependencies": {
+    "@earendil-works/pi-coding-agent": "0.85.1",
+    "@types/node": "24.13.3",
+    "typescript": "5.9.3"
+  }
 }
