@@ -1,7 +1,7 @@
 {
-  "name": "alandotcom-plugins",
+  "name": "cursor-plugins",
   "interface": {
-    "displayName": "Alan\u2019s agent plugins"
+    "displayName": "Cursor plugins"
   },
   "plugins": [
     {

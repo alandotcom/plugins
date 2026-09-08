@@ -17,8 +17,8 @@ checkout's root:
 
 ```bash
 codex plugin marketplace add .
-codex plugin add thermos@alandotcom-plugins
-codex plugin add pstack@alandotcom-plugins
+codex plugin add thermos@cursor-plugins
+codex plugin add pstack@cursor-plugins
 ```
 
 Install either plugin independently by running only its `plugin add` command.

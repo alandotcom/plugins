@@ -26,7 +26,7 @@ From this checkout's root:
 
 ```bash
 codex plugin marketplace add .
-codex plugin add pstack@alandotcom-plugins
+codex plugin add pstack@cursor-plugins
 ```
 
 Start a new Codex thread and select `poteto-mode` from the skill picker. Each

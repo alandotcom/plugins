@@ -12,7 +12,7 @@ From this checkout's root, register the marketplace and install Thermos:
 
 ```bash
 codex plugin marketplace add .
-codex plugin add thermos@alandotcom-plugins
+codex plugin add thermos@cursor-plugins
 ```
 
 Start a new Codex thread and select `thermos` from the skill picker for the combined
