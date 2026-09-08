@@ -4,6 +4,9 @@ description: "Apply when two or more fixes that share one premise have failed th
 disable-model-invocation: true
 ---
 
+When running in Codex, first read [the Codex host guide](../../codex.md).
+
+
 # Attack the Premise
 
 When two or more fixes that share one premise have failed the same gate, suspect the premise, not the fixes.

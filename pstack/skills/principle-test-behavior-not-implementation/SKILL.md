@@ -4,6 +4,9 @@ description: "Apply when you write, change, or keep a test. Call the code the wa
 disable-model-invocation: true
 ---
 
+When running in Codex, first read [the Codex host guide](../../codex.md).
+
+
 # Test Behavior, Not Implementation
 
 A test calls the code the way its users do and asserts the result they observe against a literal expected value. A test that asserts which calls the code made, or restates a constant the code contains, does neither.
