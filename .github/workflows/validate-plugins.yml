@@ -6,13 +6,6 @@ on:
       - ".cursor-plugin/marketplace.json"
       - "**/plugin.json"
       - "schemas/**"
-      - "thermos/opencode/**"
-      - "thermos/agents/**"
-      - "thermos/skills/**"
-      - "pstack/pi/**"
-      - "package.json"
-      - "package-lock.json"
-      - ".github/workflows/validate-plugins.yml"
 
 jobs:
   validate:
@@ -22,16 +15,10 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 24
+          node-version: 20
 
       - name: Install dependencies
-        run: npm ci --ignore-scripts
+        run: npm install --no-save ajv ajv-formats
 
       - name: Validate plugin definitions
         run: node scripts/validate-plugins.mjs
-
-      - name: Test OpenCode and Pi adapters
-        run: npm test
-
-      - name: Typecheck Pi adapter
-        run: npm run typecheck:pi

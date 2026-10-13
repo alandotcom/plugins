@@ -2,40 +2,16 @@
   "name": "alandotcom-agent-plugins",
   "version": "1.0.0",
   "type": "module",
-  "description": "Thermos reviews for OpenCode and shared hosts, plus the retained pstack Pi adapter.",
+  "description": "Thermos reviews for OpenCode and shared hosts, plus pstack workflow skills.",
   "main": "./thermos/opencode/index.js",
-  "keywords": [
-    "pi-package"
-  ],
-  "pi": {
-    "extensions": [
-      "./pstack/pi/index.ts"
-    ],
-    "skills": [],
-    "prompts": [],
-    "themes": []
-  },
   "scripts": {
-    "test": "node --test thermos/opencode/*.test.js pstack/pi/*.test.ts",
-    "test:opencode": "node --test thermos/opencode/*.test.js",
-    "test:pi": "node --test pstack/pi/*.test.ts",
-    "typecheck:pi": "tsc -p pstack/pi/tsconfig.json"
-  },
-  "peerDependencies": {
-    "@earendil-works/pi-coding-agent": "*"
-  },
-  "peerDependenciesMeta": {
-    "@earendil-works/pi-coding-agent": {
-      "optional": true
-    }
+    "test": "node --test thermos/opencode/*.test.js",
+    "test:opencode": "node --test thermos/opencode/*.test.js"
   },
   "license": "MIT",
   "repository": "https://github.com/alandotcom/plugins",
   "devDependencies": {
-    "@earendil-works/pi-coding-agent": "0.85.1",
-    "@types/node": "24.13.3",
     "ajv": "^8.20.0",
-    "ajv-formats": "^3.0.1",
-    "typescript": "5.9.3"
+    "ajv-formats": "^3.0.1"
   }
 }

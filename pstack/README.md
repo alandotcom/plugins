@@ -36,15 +36,10 @@ it does not write Cursor configuration. Cursor cloud workers and persistent
 mode reminders are unavailable in Codex. See [Codex host behavior](codex.md)
 and the [repository installation guide](../README.md#codex).
 
-### Pi
-
-See [pstack for Pi](pi/README.md) for session loading, namespaced commands, and
-Arena workers.
-
 ## get started
 
-The following setup and examples describe Cursor. Codex and Pi use the host
-instructions linked in their installation sections.
+The following setup and examples describe Cursor. Codex uses the host
+instructions linked in its installation section.
 
 two steps:
 

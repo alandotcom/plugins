@@ -4,8 +4,8 @@ This standalone repository maintains two packages:
 
 - [Thermos](thermos/README.md): parallel correctness/security and maintainability
   reviews for OpenCode, Cursor, Claude Code, Codex, and Pi.
-- [pstack for Pi](pstack/pi/README.md): the retained Pi adapter and its workflow
-  skills. OpenCode support for pstack is not included.
+- [pstack](pstack/README.md): shared engineering workflow skills. OpenCode support
+  for pstack is not included yet.
 
 Both originated in [Cursor's plugins repository](https://github.com/cursor/plugins).
 This repository preserves their attribution and MIT licenses and does not track
@@ -27,14 +27,9 @@ Thermos only in OpenCode. Run `/thermos <review scope>`. See
 
 ## Pi
 
-The root package registers `pstack/pi/index.ts` as its only Pi extension. To try
-that adapter without installing the package:
-
-```bash
-pi -e ./pstack/pi/index.ts
-```
-
 Thermos uses separate skill and agent links; see [Thermos for Pi](thermos/README.md#pi).
+This repository does not provide a pstack Pi adapter. Pi's active pstack adaptation
+is maintained separately in `pi-config`.
 Installing this repository does not modify Pi or OpenCode settings.
 
 ## Claude Code and Codex
@@ -63,13 +58,12 @@ Use Node.js 24 or later:
 ```bash
 npm ci --ignore-scripts
 npm test
-npm run typecheck:pi
 node scripts/validate-plugins.mjs
 python3 scripts/check-codex-plugins.py
 ```
 
-The OpenCode tests check V2 registration and host instructions. The Pi tests check
-the retained adapter. The Codex check requires an installed Codex CLI and checks
+The OpenCode tests check V2 registration and host instructions.
+The Codex check requires an installed Codex CLI and checks
 both this checkout and a relocated copy without model calls.
 
 After configuring OpenCode to load this checkout, verify the live registration:
