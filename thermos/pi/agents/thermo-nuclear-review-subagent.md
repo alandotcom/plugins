@@ -1,7 +1,8 @@
 ---
 name: thermo-nuclear-review-subagent
 description: Review branch changes for correctness and security.
-model: openrouter/openai/gpt-6-astra:low
+model: azure-openai-responses/gpt-6.1-sol
+thinking: high
 acceptanceRole: read-only
 ---
 
