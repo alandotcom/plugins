@@ -2,11 +2,11 @@
   "name": "alandotcom-agent-plugins",
   "version": "1.0.0",
   "type": "module",
-  "description": "Thermos reviews for OpenCode and shared hosts, plus pstack workflow skills.",
-  "main": "./thermos/opencode/index.js",
+  "description": "Thermos reviews and pstack workflow skills for OpenCode and shared hosts.",
+  "main": "./opencode/index.js",
   "scripts": {
-    "test": "node --test thermos/opencode/*.test.js",
-    "test:opencode": "node --test thermos/opencode/*.test.js"
+    "test": "node --test thermos/opencode/*.test.js pstack/opencode/*.test.js opencode/*.test.js",
+    "test:opencode": "node --test thermos/opencode/*.test.js pstack/opencode/*.test.js opencode/*.test.js"
   },
   "license": "MIT",
   "repository": "https://github.com/alandotcom/plugins",

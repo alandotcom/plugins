@@ -1,13 +1,16 @@
 #!/usr/bin/env node
 import assert from "node:assert/strict"
 import { execFile } from "node:child_process"
+import { readdir } from "node:fs/promises"
 import { resolve } from "node:path"
 import { promisify } from "node:util"
 
 const run = promisify(execFile)
 const directory = resolve(process.argv[2] ?? ".")
 const location = `location[directory]=${encodeURIComponent(directory)}`
-const ids = ["thermos", "thermo-nuclear-review", "thermo-nuclear-code-quality-review"]
+const mode = process.argv[3] ?? "bundle"
+const packages = mode === "bundle" ? ["thermos", "pstack"] : [mode]
+assert.ok(packages.every((name) => name === "thermos" || name === "pstack"), "Use bundle, thermos, or pstack")
 
 async function api(method, path, body) {
   const args = ["api", method, path]
@@ -17,38 +20,60 @@ async function api(method, path, body) {
 }
 
 const plugins = (await api("get", `/api/plugin?${location}`)).data
-assert.equal(plugins.find((plugin) => plugin.id === "thermos")?.state.status, "active")
-
-const agents = (await api("get", `/api/agent?${location}`)).data
-for (const id of ids.slice(1)) {
-  const agent = agents.find((agent) => agent.id === `${id}-subagent`)
-  assert.equal(agent?.mode, "subagent")
-  assert.ok(agent.system.includes("# Thermos in OpenCode"))
-}
+assert.equal(plugins.find((plugin) => plugin.id === (mode === "bundle" ? "alandotcom.plugins" : mode))?.state.status, "active")
 const commands = (await api("get", `/api/command?${location}`)).data
-assert.ok(commands.some((command) => command.name === "thermos"))
-
-const session = (await api("post", "/api/session", {
-  title: "Thermos registration check (no model calls)",
-  location: { directory },
-})).data
-try {
-  for (const id of ids) {
-    await api("post", `/api/experimental/session/${session.id}/skill`, {
-      id: `thermos:${id}`, resume: false,
-    })
+for (const name of packages) {
+  const agentIDs = name === "thermos"
+    ? ["thermo-nuclear-review-subagent", "thermo-nuclear-code-quality-review-subagent"]
+    : ["poteto-agent", "comment-sicko"]
+  const agents = await Promise.all(agentIDs.map(async (id) =>
+    (await api("get", `/api/agent/${id}?${location}`)).data))
+  for (const agent of agents) {
+    assert.equal(agent.mode, "subagent")
+    assert.ok(agent.system.includes(name === "thermos" ? "# Thermos in OpenCode" : "# pstack in OpenCode"))
   }
-  const messages = (await api("get", `/api/session/${session.id}/context`)).data
+  const root = name === "thermos"
+    ? agents[0].system.match(/^- (.+)\/skills\/thermo-nuclear-review\/SKILL.md$/m)?.[1]
+    : agents[0].system.match(/^PSTACK_ROOT: (.+)$/m)?.[1]
+  assert.ok(root, `Missing installed ${name} resource path`)
+  const entries = await readdir(resolve(root, "skills"), { withFileTypes: true })
+  const ids = entries.filter((entry) => entry.isDirectory()).map((entry) => entry.name)
+  assert.ok(ids.length)
   for (const id of ids) {
-    const message = messages.find((message) => message.type === "skill" && message.skill === `thermos:${id}`)
-    assert.ok(message?.text.includes("# Thermos in OpenCode"))
-    assert.ok(message.text.includes(`${directory}/thermos/skills/thermo-nuclear-review/SKILL.md`))
-    assert.ok(message.text.includes(`${directory}/thermos/skills/thermo-nuclear-code-quality-review/SKILL.md`))
-    assert.ok(!message.text.includes("agentScope"))
-    assert.ok(!message.text.includes("model: opus"))
+    const command = name === "thermos" ? "thermos" : `pstack:${id}`
+    assert.ok(commands.some((item) => item.name === command), `Missing /${command}`)
+    const session = (await api("post", "/api/session", {
+      title: `${name} skill check (no model calls)`,
+      location: { directory },
+    })).data
+    try {
+      await api("post", `/api/experimental/session/${session.id}/skill`, { id: `${name}:${id}`, resume: false })
+      const messages = (await api("get", `/api/session/${session.id}/context`)).data
+      const message = messages.find((item) => item.type === "skill" && item.skill === `${name}:${id}`)
+      assert.ok(message?.text.includes(name === "thermos" ? "# Thermos in OpenCode" : "# pstack in OpenCode"))
+      assert.ok(message.text.includes(root))
+      assert.ok(!messages.some((item) => item.type === "assistant"), "Skill checks must not call models")
+    } finally {
+      await api("delete", `/api/session/${session.id}`)
+    }
   }
-  console.log("Thermos is active: three packaged skills, both reviewers, and /thermos registered.")
-  console.log("Fresh-session skill activation passed without model calls.")
-} finally {
-  await api("delete", `/api/session/${session.id}`)
+  console.log(`${name}: both agents, commands, and all ${ids.length} fresh-session skill activations passed without model calls.`)
+  if (name === "pstack") {
+    const session = (await api("post", "/api/session", {
+      title: "Comment Sicko permission check (no model calls)",
+      agent: "comment-sicko",
+      location: { directory },
+    })).data
+    try {
+      for (const action of ["edit", "shell", "subagent", "execute", "qa_write_record"]) {
+        const result = (await api("post", `/api/session/${session.id}/permission`, {
+          agent: "comment-sicko", action, resources: ["*"],
+        })).data
+        assert.equal(result.effect, "deny", `Comment Sicko must deny ${action}`)
+      }
+      console.log("pstack: live reviewer permission checks deny local, delegated, and external mutations.")
+    } finally {
+      await api("delete", `/api/session/${session.id}`)
+    }
+  }
 }

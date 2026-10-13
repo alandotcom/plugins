@@ -51,9 +51,9 @@ paths while preserving the host's reviewer model and permission configuration.
 opencode plugin add github:alandotcom/plugins
 ```
 
-That resolves the repository's root `package.json`, whose `main` points at the plugin. Restart
-opencode; the three skills and both subagents are then available, and the agent files stay the
-single source for both hosts.
+The root package loads the `alandotcom.plugins` bundle with Thermos and pstack.
+Thermos's three skills and both subagents retain their IDs and model settings.
+The agent files remain shared across hosts.
 
 For local development, add the absolute path of `thermos/opencode` to the existing
 `plugins` array in `opencode.json`:
@@ -71,6 +71,9 @@ rubrics use the IDs `thermos:thermo-nuclear-review` and
 skills discovered from other hosts. The shared workflow reads
 [host-specific dispatch instructions](hosts.md); OpenCode receives its own guide
 directly from the plugin. The review rubrics are shared across hosts.
+
+Use either the repository bundle or the local Thermos adapter. Remove an earlier
+local Thermos entry before installing the bundle to avoid repeated registrations.
 
 The shared agents inherit the host model. To select a reviewer model, use an ID
 that your opencode provider can resolve in `opencode.json`:

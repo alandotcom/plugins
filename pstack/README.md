@@ -36,9 +36,55 @@ it does not write Cursor configuration. Cursor cloud workers and persistent
 mode reminders are unavailable in Codex. See [Codex host behavior](codex.md)
 and the [repository installation guide](../README.md#codex).
 
+### OpenCode
+
+Install the repository bundle to load both pstack and Thermos:
+
+```bash
+opencode plugin add github:alandotcom/plugins
+```
+
+To install only pstack, use the self-contained pstack package:
+
+```bash
+opencode plugin add 'github:alandotcom/plugins#main::path:pstack'
+```
+
+Use one installation method. The bundle appears as `alandotcom.plugins` in the
+plugin list; the standalone package appears as `pstack`.
+
+Run `/poteto-mode <task>`, `/poteto-help <question>`, or `/setup-pstack`.
+Every skill is selectable as `pstack:<name>` and has a matching command, such as
+`/pstack:how`. The adapter registers `poteto-agent` and `comment-sicko` with
+OpenCode-specific instructions and absolute paths to shared resources.
+
+Models inherit OpenCode's agent settings. `/setup-pstack` selects verified
+provider-qualified models and saves confirmed per-role choices in the plugin's
+`options.models` mapping. It preserves other configuration and does not create
+Cursor model rules. For example, a panel can inherit both reviewer models:
+
+```json
+{
+  "plugins": [{
+    "package": "github:alandotcom/plugins",
+    "options": {
+      "models": { "interrogate reviewers": ["inherit-parent", "inherit-parent"] }
+    }
+  }]
+}
+```
+
+Use the role labels from `setup-pstack`. Explicit model values use OpenCode's
+`provider/model#variant` format and must exist in the active model catalog.
+Inheritance entries preserve panel counts but do not establish model diversity.
+
+OpenCode does not implement Cursor's persistent mode reminders, cloud workers,
+or `/loop`. Reinvoke `poteto-mode` in a fresh session. The adapter supplies the
+[OpenCode host guide](opencode/host.md) to every skill and delegate.
+
 ## get started
 
-The following setup and examples describe Cursor. Codex uses the host
+The following setup and examples describe Cursor. OpenCode and Codex use the host
 instructions linked in its installation section.
 
 two steps:

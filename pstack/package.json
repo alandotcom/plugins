@@ -1,0 +1,8 @@
+{
+  "name": "pstack-opencode",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "pstack workflow skills and subagents for OpenCode V2.",
+  "main": "./opencode/index.js",
+  "license": "MIT"
+}
