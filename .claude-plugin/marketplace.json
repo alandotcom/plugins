@@ -6,7 +6,7 @@
     "email": "plugins@cursor.com"
   },
   "metadata": {
-    "description": "Cursor plugins that also run in Claude Code. This fork adds Claude Code and opencode manifests; the upstream repo ships Cursor manifests only."
+    "description": "Cursor plugins with additional Claude Code, Codex, Pi, and OpenCode support for selected plugins in this fork."
   },
   "plugins": [
     {
@@ -14,6 +14,11 @@
       "source": "./thermos",
       "description": "Thermo-nuclear branch review: deep security and correctness audits, harsh code-quality rubrics, and parallel review subagents.",
       "category": "development"
+    },
+    {
+      "name": "origin-apps",
+      "source": "./origin-apps",
+      "description": "Skills for building on the Cursor Origin API. Fetch the live spec first, then follow the Origin rules for credentials, scopes, webhooks, paging, and errors. Includes a skill that plans the port of an existing GitHub App."
     }
   ]
 }
