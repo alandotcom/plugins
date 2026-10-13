@@ -5,7 +5,7 @@
 // same two directories through opencode's plugin API: the skills in `../skills` and one subagent
 // per file in `../agents`. Both hosts run the same files, so there are no copies to keep in sync.
 //
-// Install by adding the absolute path of this directory to `plugin` in opencode.json.
+// Install by adding the absolute path of this directory to `plugins` in opencode.json.
 import { readdir, readFile } from "node:fs/promises"
 import { dirname, join } from "node:path"
 import { fileURLToPath } from "node:url"
@@ -17,23 +17,43 @@ const agentsDirectory = join(thermosRoot, "agents")
 export default {
   id: "thermos",
   setup: async (ctx) => {
-    // opencode grew `draft.source` after the beta this was written against, where the only way in
-    // was `draft.add` with an already-parsed skill. Feed whichever one the running build offers.
+    const host = await readFile(join(thermosRoot, "opencode", "host.md"), "utf8")
+    const paths = [
+      "skills/thermo-nuclear-review/SKILL.md",
+      "skills/thermo-nuclear-code-quality-review/SKILL.md",
+      "agents/thermo-nuclear-review-subagent.md",
+      "agents/thermo-nuclear-code-quality-review-subagent.md",
+    ].map((path) => `- ${join(thermosRoot, path)}`).join("\n")
+    const instructions = `${host.trim()}\n\n## Package paths\n\n${paths}\n\n`
     const skills = await readSkills(skillsDirectory)
     await ctx.skill.transform((draft) => {
-      if (typeof draft.source === "function") {
-        draft.source({ type: "directory", path: skillsDirectory })
-        return
+      for (const skill of skills) {
+        draft.add({ ...skill, id: `thermos:${skill.id}`, content: instructions + skill.content })
       }
-      for (const skill of skills) draft.add(skill)
+    })
+
+    await ctx.command.transform((draft) => {
+      draft.add({
+        name: "thermos",
+        description: "Run the packaged Thermos correctness/security and code-quality reviews.",
+        execute: async ({ sessionID, prompt, delivery }) => {
+          await ctx.session.prompt({
+            ...prompt,
+            sessionID,
+            delivery,
+            skills: [...(prompt.skills ?? []), { id: "thermos:thermos" }],
+          })
+        },
+      })
     })
 
     const agents = await readAgents(agentsDirectory)
     await ctx.agent.transform((draft) => {
       for (const agent of agents) {
         draft.update(agent.id, (item) => {
-          item.system = agent.system
+          item.system = instructions + agent.system
           item.mode = agent.mode
+          if (agent.name !== undefined) item.name = agent.name
           if (agent.description !== undefined) item.description = agent.description
           if (agent.model !== undefined) item.model = agent.model
         })
@@ -53,11 +73,8 @@ async function readSkills(directory) {
       id: parsed.fields.name ?? entry.name,
       name: parsed.fields.name ?? entry.name,
       description: parsed.fields.description,
-      // opencode's own key for a skill the user invokes with a slash. Claude Code spells the same
-      // intent `disable-model-invocation`, which both rubric skills set so that a parent agent has
-      // to route the audit through the subagent rather than running the rubric itself.
-      slash: parsed.fields["disable-model-invocation"] === "true" ? true : undefined,
-      location,
+      autoinvoke: parsed.fields["disable-model-invocation"] !== "true",
+      path: location,
       content: parsed.body,
     })
   }
@@ -74,6 +91,7 @@ async function readAgents(directory) {
     agents.push({
       // opencode takes an agent's id from its filename, which the `name` field always matches.
       id: name.slice(0, -3),
+      name: fields.display_name,
       system: parsed.body,
       mode: fields.mode === "primary" || fields.mode === "all" ? fields.mode : "subagent",
       description: fields.description,

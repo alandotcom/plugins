@@ -6,6 +6,8 @@ disable-model-invocation: true
 
 # Benchmark checklist
 
+When running in Codex, first read [the Codex host guide](../../codex.md).
+
 Use this when you produce a performance number: a PR's before and after, a regression claim, a hillclimb harness, or a library or config choice. Answer each question with evidence from a run, not a guess about the code.
 
 For a quick ballpark the user asked for, one run is enough. Still check questions 4 and 7, and say that it is one run. Skip the rest unless that run looks wrong. A choice between options is never a ballpark.

@@ -12,7 +12,7 @@ From this checkout's root, register the marketplace and install Thermos:
 
 ```bash
 codex plugin marketplace add .
-codex plugin add thermos@cursor-plugins
+codex plugin add thermos@plugins
 ```
 
 Start a new Codex thread and select `thermos` from the skill picker for the combined
@@ -33,7 +33,7 @@ Register this repository as a marketplace, then install the plugin:
 
 ```bash
 claude plugin marketplace add alandotcom/plugins
-claude plugin install thermos@cursor-plugins
+claude plugin install thermos@plugins
 ```
 
 Use a local checkout instead of the GitHub source by passing its path to
@@ -41,10 +41,11 @@ Use a local checkout instead of the GitHub source by passing its path to
 review, or `/thermos:thermo-nuclear-review` and `/thermos:thermo-nuclear-code-quality-review` for a
 single pass.
 
-### opencode
+### OpenCode
 
-opencode reads no plugin manifest, so `thermos/opencode/` is a small opencode plugin that hands it
-the same `skills/` and `agents/` directories Claude Code loads:
+`thermos/opencode/` registers the shared skills and agents through the OpenCode V2
+plugin API. It supplies OpenCode-specific dispatch instructions and absolute rubric
+paths while preserving the host's reviewer model and permission configuration.
 
 ```bash
 opencode plugin add github:alandotcom/plugins
@@ -54,8 +55,22 @@ That resolves the repository's root `package.json`, whose `main` points at the p
 opencode; the three skills and both subagents are then available, and the agent files stay the
 single source for both hosts.
 
-To run it from a clone instead, add the absolute path of `thermos/opencode` to the `plugin` array in
-`opencode.json`. `opencode plugin add` rejects a local path.
+For local development, add the absolute path of `thermos/opencode` to the existing
+`plugins` array in `opencode.json`:
+
+```json
+{
+  "plugins": ["/absolute/path/to/plugins/thermos/opencode"]
+}
+```
+
+Run `/thermos <review scope>` for the combined review. The command loads the
+packaged `thermos:thermos` skill, which you can also select directly. The two
+rubrics use the IDs `thermos:thermo-nuclear-review` and
+`thermos:thermo-nuclear-code-quality-review`. These IDs avoid collisions with
+skills discovered from other hosts. The shared workflow reads
+[host-specific dispatch instructions](hosts.md); OpenCode receives its own guide
+directly from the plugin. The review rubrics are shared across hosts.
 
 The shared agents inherit the host model. To select a reviewer model, use an ID
 that your opencode provider can resolve in `opencode.json`:
@@ -73,10 +88,9 @@ reasoning setting suits both subagents.
 
 ### Pi
 
-Pi loads skills from `~/.pi/agent/skills/` and, with the subagent extension enabled, loads these
-agents from `~/.pi/agent/agents/`. The `subagent` tool is supplied by that extension; it is not part
-of Pi core. Configure the extension to use `agentScope: user`, then expose this checkout with
-symlinks. These commands only create the resource symlinks and do not change Pi settings:
+Pi loads skills from `~/.pi/agent/skills/` and reviewer agents from
+`~/.pi/agent/agents/` when a delegation extension is enabled. Expose this checkout
+with symlinks. These commands create resource links without changing Pi settings:
 
 ```bash
 THERMOS_ROOT=/absolute/path/to/plugins/thermos
@@ -92,15 +106,16 @@ done
 ```
 
 The commands expect unused destination paths. If a path already exists, inspect
-and back it up before replacing it. Pi-specific agent files retain the existing
-`openrouter/openai/gpt-6-astra:low` model preference and read the shared review
-instructions. Choose an available model in those Pi agent files if needed;
-Cursor, Claude Code, OpenCode, and Codex retain their own model configuration.
+and back it up before replacing it. Pi-specific agent files use the
+`azure-openai-responses/gpt-6.1-sol` model with the `thinking: high` setting and read the shared
+review instructions. Choose an available model in those Pi agent files if needed; Cursor,
+Claude Code, OpenCode, and Codex retain their own model configuration.
 
 Restart Pi after creating the links. Run the combined review with `/skill:thermos`; the individual
 review skills are available as `/skill:thermo-nuclear-review` and
 `/skill:thermo-nuclear-code-quality-review`. The `thermos` skill uses the extension's parallel
-`subagent` call with `tasks: [{ agent, task, cwd }]` and `agentScope: user` to run both reviewers.
+delegation tool to run both reviewers. See [Pi host dispatch](hosts.md#pi) for
+TintinWeb's `Agent` tool and the `subagent` extension variant.
 
 ## Architecture
 

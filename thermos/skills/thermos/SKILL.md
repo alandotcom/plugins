@@ -6,6 +6,8 @@ disable-model-invocation: true
 
 When running in Codex, first read [the Codex host guide](../../codex.md).
 
+For other hosts, read the matching section of [the host guide](../../hosts.md) before dispatch.
+
 
 # Thermos
 
@@ -28,23 +30,9 @@ Run the two thermo review passes as parallel subagents, then synthesize their re
    - `thermo-nuclear-code-quality-review-subagent` for maintainability, structure, file-size growth,
      spaghetti, abstractions and codebase health.
 
-   Pi uses the subagent extension's custom `subagent` tool, which is not part of Pi core. Submit one
-   call with `agentScope: user` and a `tasks` array containing both `{ agent, task, cwd }` objects:
-
-   ```json
-   {
-     "agentScope": "user",
-     "tasks": [
-       { "agent": "thermo-nuclear-review-subagent", "task": "... RUBRIC_PATH: /absolute/path/to/thermo-nuclear-review/SKILL.md ...", "cwd": "/absolute/path/to/repository" },
-       { "agent": "thermo-nuclear-code-quality-review-subagent", "task": "... RUBRIC_PATH: /absolute/path/to/thermo-nuclear-code-quality-review/SKILL.md ...", "cwd": "/absolute/path/to/repository" }
-     ]
-   }
-   ```
-
-   Codex uses native children with the rubric and agent instructions supplied by path, as
-   described in [the Codex host guide](../../codex.md).
-   Claude Code uses the `Agent` tool with `subagent_type` set to each name. Cursor uses `Task` with
-   `run_in_background: true`. opencode uses the `task` tool.
+   Use the active host's registered delegation tool and completion mechanism. The host guide
+   supplies dispatch details. If delegation is unavailable, report that limitation rather than
+   claiming two independent reviews.
 5. Give both subagents the same scoped context, and ask each for prioritized findings with file
    references and evidence.
 6. When both finish, synthesize. Findings come first, deduplicated across the two reviewers. Weight

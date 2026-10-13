@@ -1,7 +1,7 @@
 {
-  "name": "cursor-plugins",
+  "name": "plugins",
   "interface": {
-    "displayName": "Cursor plugins"
+    "displayName": "Plugins"
   },
   "plugins": [
     {

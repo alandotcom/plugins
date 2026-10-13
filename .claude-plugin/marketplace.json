@@ -1,12 +1,11 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
-  "name": "cursor-plugins",
+  "name": "plugins",
   "owner": {
-    "name": "Cursor",
-    "email": "plugins@cursor.com"
+    "name": "Alan Cohen"
   },
   "metadata": {
-    "description": "Cursor plugins with additional Claude Code, Codex, Pi, and OpenCode support for selected plugins in this fork."
+    "description": "Thermos reviews for Claude Code."
   },
   "plugins": [
     {
@@ -14,11 +13,6 @@
       "source": "./thermos",
       "description": "Thermo-nuclear branch review: deep security and correctness audits, harsh code-quality rubrics, and parallel review subagents.",
       "category": "development"
-    },
-    {
-      "name": "origin-apps",
-      "source": "./origin-apps",
-      "description": "Skills for building on the Cursor Origin API. Fetch the live spec first, then follow the Origin rules for credentials, scopes, webhooks, paging, and errors. Includes a skill that plans the port of an existing GitHub App."
     }
   ]
 }

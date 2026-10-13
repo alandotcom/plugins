@@ -2,7 +2,7 @@
   "name": "alandotcom-agent-plugins",
   "version": "1.0.0",
   "type": "module",
-  "description": "Shared host package: pstack for Pi and Thermos for OpenCode.",
+  "description": "Thermos reviews for OpenCode and shared hosts, plus the retained pstack Pi adapter.",
   "main": "./thermos/opencode/index.js",
   "keywords": [
     "pi-package"
@@ -16,6 +16,8 @@
     "themes": []
   },
   "scripts": {
+    "test": "node --test thermos/opencode/*.test.js pstack/pi/*.test.ts",
+    "test:opencode": "node --test thermos/opencode/*.test.js",
     "test:pi": "node --test pstack/pi/*.test.ts",
     "typecheck:pi": "tsc -p pstack/pi/tsconfig.json"
   },
@@ -32,6 +34,8 @@
   "devDependencies": {
     "@earendil-works/pi-coding-agent": "0.85.1",
     "@types/node": "24.13.3",
+    "ajv": "^8.20.0",
+    "ajv-formats": "^3.0.1",
     "typescript": "5.9.3"
   }
 }
